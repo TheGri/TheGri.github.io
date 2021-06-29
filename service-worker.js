@@ -1,9 +1,7 @@
 var cacheName = 'HTWK-K';
 var filesToCache = [
-	'./',
 	'./index.html',
-	'./public/images/logo512.png',
-	'./app.js'
+	'./images/logo512.png'
 ];
 
 self.addEventListener('install', function(pEvent) {
@@ -16,9 +14,8 @@ self.addEventListener('install', function(pEvent) {
 	);
 });
 
-// Cache first, Network second.
-// Ressourcen, die aus dem Netz geholt werden muessen, werden auch noch
-// in den Cache gesteckt
+//Activate TODO
+
 self.addEventListener('fetch', function(pEvent) {
 	console.log('[Service Worker] Angeforderte URL:', pEvent.request.url);
 	pEvent.respondWith(
@@ -28,15 +25,19 @@ self.addEventListener('fetch', function(pEvent) {
 				return pResponse;
 			} else {
 				console.log('[Service Worker] Ressource wird aus dem Netzwerk geladen:', pEvent.request.url);
-				var fetchPromise = fetch(pEvent.request)
-				.then(function (networkResponse) {
-                        cache.put(event.request, networkResponse.clone());
-                        return networkResponse});				
-				return fetchPromise;
+				return fetch(pEvent.request);
 			}
-		}).catch(function(pError) {
-		        console.error(pError);
-// Fehlermeldung ausgeben in Console, falls
-	       })
-	);       
+		})
+	);
 });
+
+// Background Sync
+self.addEventListener("sync", (event) => {
+	event.waitUntil(
+	  (async function () {
+		const cache = await caches.open(cacheName);
+		await cache.add(filesToCache);
+	  })()
+	);
+  });
+  
