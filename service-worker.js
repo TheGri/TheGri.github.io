@@ -4,6 +4,20 @@ var filesToCache = [
 	'./images/logo512.png'
 ];
 
+self.addEventListener('activate', function(pEvent) {
+	console.log('[Service Worker] Aktivierung wird gestartet');
+	pEvent.waitUntil(
+		caches.keys().then(function(pKeys) {
+			return Promise.all(pKeys.map(function(pKey) {
+				if (pKey !== cacheName) {
+					console.log('[Service Worker] Veralteter Cache wird gelöscht:', pKey);
+					return caches.delete(pKey);
+				}
+			}));
+		})
+	);
+});
+
 self.addEventListener('install', function(pEvent) {
 	console.log('[Service Worker] Installation wird gestartet');
 	pEvent.waitUntil(
@@ -13,8 +27,6 @@ self.addEventListener('install', function(pEvent) {
 		})
 	);
 });
-
-//Activate TODO
 
 self.addEventListener('fetch', function(pEvent) {
 	console.log('[Service Worker] Angeforderte URL:', pEvent.request.url);

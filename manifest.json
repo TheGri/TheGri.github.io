@@ -37,8 +37,10 @@
       "purpose": "any maskable"
     }
   ],
+  "dir": "ltr",
+  "lang": "de-DE",
   "start_url": "./index.html",
-  "display": "standalone",
+  "display": "minimal-ui",
   "orientation": "portrait",
   "theme_color": "#e4eef1",
   "background_color": "#e4eef1"
