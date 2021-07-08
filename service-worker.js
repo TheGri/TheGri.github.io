@@ -107,6 +107,7 @@ self.addEventListener("sync", (event) => {
     (async function () {
       const cache = await caches.open(cacheName);
       await cache.add(filesToCache);
+      console.log("Background-Sync durchgeführt");
     })()
   );
 });
